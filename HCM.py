@@ -130,10 +130,12 @@ def DesposeUrlRecordThread():
                     continue
                 url,url2c = y['URL']
                 actime = y["AccessTime"]
+                refer = y["Referer"]
                 if url not in UrlStorage:
-                    UrlStorage[url]=[url2c,0,dict()]  #cache_url,stat,{actime:count}
+                    UrlStorage[url]=[url2c,0,dict(),refer]  #cache_url,stat,{actime:count}
                 else:
                     UrlStorage[url][0]=url2c
+                    UrlStorage[url][3]=refer
                 UrlStorage[url][2][actime]=UrlStorage[url][2].setdefault(actime,0)+1                
         mutex_url_storage.release()
         log.info("本次处理,URL队列长度:%d,耗时%r s",len(list2),time.time()-b)
@@ -197,7 +199,7 @@ def CalcHostListFun():
         
         if count>=hotcount:  
             if info[1]==0:
-                add_list.append((url,count,info[0]))   #需要增加的热点
+                add_list.append((url,count,info[0],info[3]))   #需要增加的热点
                 info[1]=1
             elif info[1]==2:
                 hot_set.add(url)    #现有热点
@@ -257,13 +259,14 @@ def CacheUpdateThread():
         Cond_Add_Del.acquire()
         while not url_table_add:
             Cond_Add_Del.wait()
-        url,count,url2cache = url_table_add.pop()
+        url,count,url2cache,referer = url_table_add.pop()
         Cond_Add_Del.release()
 
         client = tornado.httpclient.HTTPClient()
         try:
             log.info("download url:%r",url2cache)
-            response = client.fetch(url2cache)
+            #response = client.fetch(url2cache)
+            response = client.fetch( tornado.httpclient.HTTPRequest(url2cache,headers={"Referer":referer,}))
         #except tornado.httpclient.HTTPError as e:
         except Exception as e:
             log.error("download error,err=%s,url=%r",str(e),url2cache)

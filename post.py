@@ -7,7 +7,7 @@ import time
 import json
 import datetime
 
-theaders = {}
+theaders = {"Referer":"www.youku.com",}
 
 URL_LIST = [
     "http://220.181.154.13/youku/6772610CC664383066BC282ADE/0300020100564BBECC8AB60230E41610E48306-7B01-B6AA-657F-C99C773CBE09.flv?special=true",
@@ -56,8 +56,8 @@ import random
 import string
 
 def postfun():
-    #httpClient = httplib.HTTPConnection('124.126.126.103', 8888, timeout=30)
-    httpClient = httplib.HTTPConnection('localhost', 8888, timeout=30)
+    httpClient = httplib.HTTPConnection('124.126.126.103', 8888, timeout=30)
+    #httpClient = httplib.HTTPConnection('localhost', 8888, timeout=30)
     while True:
         try:
             tbody = {"TransactionID": 1478,
@@ -71,6 +71,7 @@ def postfun():
                 i = random.randrange(0,len(URL_LIST))
                 tbody["RecordTotal"]+=1
                 tbody["Records"].append({"serialNum":x+1,
+                                         "Referer":"www.youku.com",
                         "AccessTime":datetime.datetime.now().strftime(ISOTIMEFORMAT),
                          "URL":URL_LIST[i]})
                 '''
@@ -107,8 +108,8 @@ def gethoturl():
               "MsgType":"CachedContentUpdate","Mode":1
         })
 
-    #httpClient = httplib.HTTPConnection('124.126.126.103',8888,timeout=30)
-    httpClient = httplib.HTTPConnection('localhost',8888,timeout=30)
+    httpClient = httplib.HTTPConnection('124.126.126.103',8888,timeout=30)
+    #httpClient = httplib.HTTPConnection('localhost',8888,timeout=30)
     while True:
         try:
             b=time.time()
