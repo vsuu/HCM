@@ -1,0 +1,1 @@
+copy/b "wiznote-windows-x86-2017-01-04.exe.001"+"wiznote-windows-x86-2017-01-04.exe.002" "wiznote-windows-x86-2017-01-04.exe"
