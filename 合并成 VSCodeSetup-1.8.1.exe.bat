@@ -1,1 +1,0 @@
-copy/b "VSCodeSetup-1.8.1.exe.001"+"VSCodeSetup-1.8.1.exe.002"+"VSCodeSetup-1.8.1.exe.003" "VSCodeSetup-1.8.1.exe"
